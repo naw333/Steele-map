@@ -20,14 +20,22 @@
 
   .overlay {
   position: absolute;
-  top: 0;
-  left: 0;
+  inset: 0;
   width: 100%;
   display: none;
+  pointer-events: none;
+}
+
+.overlay.preview {
+  pointer-events: none;
+}
+
+.overlay.detail {
   pointer-events: auto;
   cursor: pointer;
 }
 
+  
 </style>
 </head>
 
@@ -36,31 +44,48 @@
 <div id="map-container">
   <div id="svg-container"></div>
 
-  <img id="325r" class="overlay" src="Images/325R(2).png">
+  <img id="325rp" class="overlay preview" src="Images/325R(2).png">
+  <img id="325rd" class="overlay detail" src="Images/B134 HVAC.png">
 </div>
 
 <script>
-fetch("Images/325hvacedit.svg")
-  .then(res => res.text())
-  .then(svg => {
-    document.getElementById("svg-container").innerHTML = svg;
-
-    // Now SVG elements are accessible
-    document.getElementById("RA_325").onclick = () => showOverlay("325r");
-  });
-
-function showOverlay(id) {
-  document.querySelectorAll(".overlay").forEach(o => o.style.display = "none");
-  document.getElementById(id).style.display = "block";
-}
 
 function hideOverlays() {
   document.querySelectorAll(".overlay")
     .forEach(o => o.style.display = "none");
 }
 
-document.querySelectorAll(".overlay").forEach(overlay => {
-  overlay.addEventListener("click", hideOverlays);
+function showOverlay(id) {
+  hideOverlays();
+  document.getElementById(id).style.display = "block";
+}
+
+fetch("Images/325hvacedit.svg")
+  .then(r => r.text())
+  .then(svg => {
+    document.getElementById("svg-container").innerHTML = svg;
+
+    const hotspot = document.getElementById("RA_325");
+
+    // Hover preview
+    hotspot.addEventListener("mouseenter", () => {
+      showOverlay("325rp");
+    });
+
+    hotspot.addEventListener("mouseleave", () => {
+      document.getElementById("325rp").style.display = "none";
+    });
+
+    // Click detail
+    hotspot.addEventListener("click", (e) => {
+      e.stopPropagation();
+      showOverlay("325rd");
+    });
+  });
+
+// Click detail overlay to close
+document.querySelectorAll(".overlay.detail").forEach(o => {
+  o.addEventListener("click", hideOverlays);
 });
 
 </script>
