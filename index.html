@@ -4,3 +4,64 @@
     <img src="Images/325hvacedit.svg" alt="Base map" style="width:100%">
   </body>
 </html>
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+
+<style>
+  body { margin: 0; background: #111; }
+
+  #map-container {
+    position: relative;
+    max-width: 1574px;
+    margin: auto;
+  }
+
+  #svg-container svg {
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+
+  .overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    display: none;
+    pointer-events: none;
+  }
+</style>
+</head>
+
+<body>
+
+<div id="map-container">
+  <div id="svg-container"></div>
+
+  <img id="325r" class="overlay" src="Images/325R(2).png">
+</div>
+
+<script>
+fetch("Images/325hvacedit.svg")
+  .then(res => res.text())
+  .then(svg => {
+    document.getElementById("svg-container").innerHTML = svg;
+
+    // Now SVG elements are accessible
+    document.getElementById("RA_325").onclick = () => showOverlay("325r");
+  });
+
+function showOverlay(id) {
+  document.querySelectorAll(".overlay").forEach(o => o.style.display = "none");
+  document.getElementById(id).style.display = "block";
+}
+</script>
+
+</body>
+</html>
+
