@@ -19,13 +19,15 @@
   }
 
   .overlay {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    display: none;
-    pointer-events: none;
-  }
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  display: none;
+  pointer-events: auto;
+  cursor: pointer;
+}
+
 </style>
 </head>
 
@@ -51,6 +53,16 @@ function showOverlay(id) {
   document.querySelectorAll(".overlay").forEach(o => o.style.display = "none");
   document.getElementById(id).style.display = "block";
 }
+
+function hideOverlays() {
+  document.querySelectorAll(".overlay")
+    .forEach(o => o.style.display = "none");
+}
+
+document.querySelectorAll(".overlay").forEach(overlay => {
+  overlay.addEventListener("click", hideOverlays);
+});
+
 </script>
 
 </body>
